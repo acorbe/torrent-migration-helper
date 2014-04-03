@@ -26,7 +26,7 @@ def list_dir(path = DEFAULT_PATH
 
 def build_df_from_flist(path
                         , flist = None                        
-                        , default_ext = '.torrent' ):
+                        , default_ext = DEFAULT_F_EXT ):
     
     if flist is None:
         flist = list_dir(path)
@@ -81,6 +81,33 @@ def filter_torrent_in_given_dl_site(flist_df,dl_site_content):
     print "done"
     return matching
 
+
+def main(tor_fl_source
+         , tor_fl_dest
+         , tor_dl_source
+         , tracker_address_content = None ):
+
+    #builds database of torrent files
+    df = build_df_from_flist(tor_fl_source)
+    
+    #possibly restricts torrent database considering just trackers having a particular string in their address
+    if tracker_address_content is not None:    
+        df_fl = parse_tracker_list(df,tracker_address_content)
+    else:
+        df_fl = df
+
+    #builds the database of the download target directory
+    df_dl = gather_downloaded_files(tor_dl_source)
+
+    #extracts the intersection between the torrent files list and the files actually downloaded (based on the file name)
+    matching1 = filter_torrent_in_given_dl_site(df_fl,df_dl)
+
+    #obtains the list of .torrent files from matching1 
+    df_fl1 = df_fl[matching1]
+
+    #copies selected .torrent files in destination path
+    df_fl1.fpath.apply(lambda pt : shutil.copy(pt,tor_fl_dest))
+
 if __name__ == '__main__':
 
     tor_dl_source = '/downloaded/torrent/location/'
@@ -88,16 +115,6 @@ if __name__ == '__main__':
     tor_fl_source = '/torrent/file/source/'
     tor_fl_dest = '/torrent/file/destination/'
 
-    
     tracker_address_content = 'tracker_address_content'
-    
-    df = build_df_from_flist(tor_fl_source)
-    df_fl = parse_tracker_list(df,tracker_address_content)
 
-    dl1 = gather_downloaded_files(tor_dl_source)
-
-    matching1 = filter_torrent_in_given_dl_site(df_fl,dl1)
-
-    df_fl1 = df_fl[matching1]
-
-    df_fl1.fpath.apply(lambda pt : shutil.copy(pt,tor_fl_dest))
+    main(tor_fl_source, tor_fl_dest, tor_dl_source , tracker_address_content)
