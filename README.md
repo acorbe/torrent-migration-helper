@@ -6,7 +6,7 @@ To easily pair `.torrent` files and their final download directory on the local 
 Dependencies:
 
   + [torrentparse](https://github.com/mohanraj-r/torrentparse) by [mohanraj-r](https://github.com/mohanraj-r) which is supposed to be installed. Please check upon [my fork](https://github.com/acorbe/torrentparse) in case of unmerged PR.
-
+  + pandas, as the set of torrent files is memorized in a python dataframe and thereby queried.
 
 Tipical use:
   + TBC    
