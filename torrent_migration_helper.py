@@ -1,7 +1,35 @@
+#!/usr/bin/env python  
+"""torrent_migration_helper
+
+given a folder containing a set A of .torrent files,
+      a folder containing a set B of downloaded files,
+      [a string STR which is expected to be in the final torrent tracker name]
+
+a subset of .torrent in A such that
+      the torrent has been downloaded in B
+      [the tracker of the torrent contains STR]
+is copied in a target folder.
+
+This answers to a common need. Whenever a folder containing a downloaded torrents to be seeded needs to be migrated in another seeding server, specific .torrent files need to be selected and added to destination torrent client. This package helps to make such process automatic.
+
+"""
+
 import os
 import pandas as pd
 import torrentparse as tp
 import shutil
+
+
+__author__ = "Alessandro Corbetta"
+__copyright__ = "Copyright 2014, Alessandro Corbetta"
+
+__license__ = "GPL"
+__version__ = ".1"
+__maintainer__ = "Alessandro Corbetta"
+__email__ = "corbisoft dot codes at gmail dot com"
+
+
+
 
 DEFAULT_PATH = './torrentfile_source/'
 DEFAULT_F_EXT = '.torrent'
