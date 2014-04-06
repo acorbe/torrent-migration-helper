@@ -9,8 +9,29 @@ This is primarily aimed at facilitating torrent seeding migration from a given f
 
 Dependencies:
 
-  + [torrentparse](https://github.com/mohanraj-r/torrentparse) by [mohanraj-r](https://github.com/mohanraj-r) which is supposed to be installed. Please check upon [my fork](https://github.com/acorbe/torrentparse).
-  + pandas, as the set of torrent files is memorized in a python dataframe and thereby queried.
+  + [torrentparse](https://github.com/mohanraj-r/torrentparse) by [mohanraj-r](https://github.com/mohanraj-r) which is supposed to be installed. ([my fork](https://github.com/acorbe/torrentparse) in case of unevenness).
+  + [pandas](http://pandas.pydata.org/), as the set of torrent files is memorized in a python dataframe and thereby queried.
 
-Tipical use:
-  + TBC    
+------------------
+
+**Tipical use:**
+
+You have an hard drive where a number of torrents have been downloaded and are currently seeded. 
+
+One day, you need to migrate this hard drive to a second machine which will handle the seeding from now on.
+
+In order to get on with the seeding, you need to add to the torrent client the `.torrent` files referring to the downloaded files in the disk.
+
+In the original machine you certainly have a folder where all the `.torrent` have been cached, hence you need to select all the `.torrent` files you actually need.
+
+Moreover, you might need to consider just the `.torrent` referring to given trackers or so.
+
+
+This small application allows you to do so easily.
+
+-----------------
+
+TODO:
+
+   + UI is at the moment done via modification of three strings in the main part of the script. This has to be changed with a standard command line interaction.
+
