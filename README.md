@@ -14,7 +14,7 @@ Dependencies:
 
 ------------------
 
-**Tipical use:**
+**Typical use:**
 
 You have an hard drive where a number of torrents have been downloaded and are currently seeded. 
 
@@ -31,7 +31,7 @@ This small application allows you to do so easily.
 
 -----------------
 
-TODO:
+**TODO:**
 
    + UI is at the moment done via modification of three strings in the main part of the script. This has to be changed with a standard command line interaction.
 
