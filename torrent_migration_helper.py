@@ -9,9 +9,13 @@ def list_dir(path = DEFAULT_PATH
                   , print_list = False
                   , fending = '.torrent'
              , just_files = True ):
+"""lists the content of a given dir (path).
+
+   One can specify the ending (fending = '.torrent') of the considered files/dirs (defaulted to .torrent).
+   One can specify whether to include just files and skip directories (just_files = True). """
     
     print "acquiring file list..."
-    #flist =  [] #glob.glob(path + '/*.torrent')
+
     if just_files:
         flist = [ (f,os.path.join(path,f)) for f in os.listdir(path) if os.path.isfile(os.path.join(path,f)) and f.endswith(fending) ]
     else:
@@ -32,11 +36,18 @@ def build_df_from_flist(path
                         , flist = None                        
                         , default_ext = '.torrent' ):
     
+"""Builds a pandas DataFrame whose records are .torrent information. 
+In particular:
+
+       fname (full name of the file)
+       fpath (full path of the file) 
+       TorrentParser (TorrentParser object)
+       TrackerUrl
+"""
     if flist is None:
         flist = list_dir(path)
 
     flist_df = pd.DataFrame(flist, columns = ['fname','fpath'])
-
     flist_df['fname_plain'] = flist_df.fname.apply( lambda f : f[:-len(default_ext)])
 
     def parseTorrent(r):
@@ -47,9 +58,7 @@ def build_df_from_flist(path
         return ret
 
     print "parsing torrents..."
-
-    flist_df['TorrentParser'] = flist_df.apply( parseTorrent , axis = 1)
-    
+    flist_df['TorrentParser'] = flist_df.apply( parseTorrent, axis = 1 )    
     print "extracting trackers..."
 
     def get_tracker(r):
@@ -61,10 +70,8 @@ def build_df_from_flist(path
         else:
             return ''
 
-    flist_df['TrackerUrl'] = flist_df.apply( get_tracker , axis = 1 )
-
+    flist_df['TrackerUrl'] = flist_df.apply( get_tracker, axis = 1 )
     print "done!"
-
     
     return flist_df
 
