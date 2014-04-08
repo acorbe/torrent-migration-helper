@@ -45,7 +45,7 @@ def list_dir(path = DEFAULT_PATH
    One can specify whether to include just files and skip directories (just_files = True). """
     
     print "acquiring file list..."
-
+    
     if just_files:
         flist = [ (f,os.path.join(path,f)) for f in os.listdir(path) if os.path.isfile(os.path.join(path,f)) and f.endswith(fending) ]
     else:
@@ -76,6 +76,7 @@ In particular:
     flist_df['fname_plain'] = flist_df.fname.apply( lambda f : f[:-len(default_ext)])
 
     def parseTorrent(r):
+        """calls TorrentParser constructor on each torrent file"""
         try:
             ret = tp.TorrentParser(r['fpath'])
         except:
@@ -101,14 +102,25 @@ In particular:
     
     return flist_df
 
-def parse_tracker_list(flist_df,substr):
+def parse_tracker_list(flist_df
+                       , substr
+                       , output_filtered_torrent_list = False ):
+    """filters the pd.DataFrame containing the .torrent files information and retains
+    the ones whose tracker address contains substr.
+    returns the filtered pd.DataFrame.    
+    """
 
     flist_flt = flist_df[flist_df.TrackerUrl.apply(lambda st : substr in st)]
-    sorted_flist = flist_flt.fname
-    sorted_flist.order().to_csv('output.csv')
+
+    if output_filtered_torrent_list:
+        sorted_flist = flist_flt.fname    
+        sorted_flist.order().to_csv('output.csv')
+        
     return flist_flt
 
 def gather_downloaded_files(path):
+    """retrieves the full list of files and dirs in path"""
+
     flist = list_dir(path = path
                      , fending = ''
                      , just_files = False)
@@ -117,7 +129,9 @@ def gather_downloaded_files(path):
     return {'fnames' : flist , 'fnames_set' : flist_names_set}
     
 def filter_torrent_in_given_dl_site(flist_df,dl_site_content):
-
+    """determines which .torrents (rows in flist_df np.DataFrame) are actually in the
+    download site (df_site_content)"""
+    
     print "filtering for dl site..."
     matching = flist_df.fname_plain.apply(lambda fn : fn in dl_site_content['fnames_set'])
     print "done"
@@ -128,7 +142,15 @@ def main(tor_fl_source
          , tor_fl_dest
          , tor_dl_source
          , tracker_address_content = None ):
-
+    """core function. The following steps are performed
+         1. a database DB out of .torrent files in tor_fl_source is built
+         2. the database DB is filtered based on which trackers contain in their
+            address the string tracker_address_content
+         3. the download site (tor_dl_source) is scanned and a set with the file names is built
+         4. the elements of DB which have a correspondence in the download site are identified
+         5. Indentified .torrents are copied in folder tor_fl_dest
+    """
+    
     #builds database of torrent files
     df = build_df_from_flist(tor_fl_source)
     
