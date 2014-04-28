@@ -29,8 +29,6 @@ __maintainer__ = "Alessandro Corbetta"
 __email__ = "corbisoft dot codes at gmail dot com"
 
 
-
-
 DEFAULT_PATH = './torrentfile_source/'
 DEFAULT_F_EXT = '.torrent'
 
