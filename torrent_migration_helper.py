@@ -17,6 +17,7 @@ This answers to a common need. Whenever a folder containing a downloaded torrent
 import os
 import pandas as pd
 import torrentparse as tp
+"""torrent parse by mohanraj-r (https://github.com/mohanraj-r/torrentparse) must be installed."""
 import shutil
 
 
